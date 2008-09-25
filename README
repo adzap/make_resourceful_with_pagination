@@ -1,0 +1,66 @@
+make_resourceful_with_pagination
+=====
+
+A Rails evil-twin plugin (http://errtheblog.com/posts/67-evil-twin-plugin) for make_resourceful 
+to add pagination in DRY way. You still need to install make_resourceful, this is not a fork.
+
+Works with will_paginate and should work with paginating_find. 
+Basically any paginator that acts on the model. This rules out classic pagination.
+
+
+Example
+=======
+
+Adds pagination option to make_resourceful like so
+
+  make_resourceful do
+    actions :all
+    paginate :per_page => 10
+    
+  end
+
+Defaults to will_paginate but you can specify
+
+  :pagination_method => :other_paginator
+
+Also specify the :conditions as a string, hash, symbol for calling controller method or a proc
+
+  make_resourceful do
+    actions :all
+    paginate :conditions => 'active = 1', :order => 'not_id'
+    
+  end
+
+The current page defaults to calling a proc to work with will_paginate
+
+  lambda { params[:page] }
+
+but you can change it to a symbol of a method name which will be called before the pagination 
+method is called.
+
+To set global options update the class accessor in ApplicationController
+
+  class ApplicationController < ActionController::Base
+
+    resourceful_pagination_options.merge!(:per_page => 20)
+
+    ...
+
+OR for paginating_find
+
+  class ApplicationController < ActionController::Base
+
+    resourceful_pagination_options.merge!(:pagination_method => :find, :current_page => :page_options)
+
+    def page_options
+      { :current => params[:page], :size => 20 }
+    end
+
+    ...
+
+
+Any options set other than :current_page and :pagination_method are passed to the pagination method
+which should allow what ever customization on the finder you need.
+    
+
+Copyright (c) 2008 Adam Meehan (adam.meehan@gmail.com, http://duckpunching.com), released under the MIT license

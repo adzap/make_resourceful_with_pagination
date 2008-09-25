@@ -1,0 +1,1 @@
+require 'make_resourceful_with_pagination'
