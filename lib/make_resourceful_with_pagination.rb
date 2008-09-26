@@ -4,7 +4,7 @@ module Resourceful
       @controller.resourceful_pagination_options.merge!(options)
       
       @controller.class_eval do
-        include Resourceful::Paginator
+        include Resourceful::Pagination
         cattr_accessor :resourceful_pagination_finder_options
        
         self.resourceful_pagination_finder_options = resourceful_pagination_options.except(:pagination_method, :current_page)
@@ -12,7 +12,7 @@ module Resourceful
     end
   end
 
-  module Paginator
+  module Pagination
     def current_objects
       return @current_objects if defined?(@current_objects)
       options = self.class.resourceful_pagination_finder_options
