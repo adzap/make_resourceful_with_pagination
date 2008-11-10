@@ -15,7 +15,7 @@ module Resourceful
   module Pagination
     def current_objects
       return @current_objects if defined?(@current_objects)
-      options = self.class.resourceful_pagination_finder_options
+      options = self.class.resourceful_pagination_finder_options.dup
       options[:conditions] = get_pagination_conditions(options[:conditions])
       options[:page] = get_current_page
       pagination_method = self.class.resourceful_pagination_options[:pagination_method]
